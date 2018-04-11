@@ -667,7 +667,7 @@ struct ColorCubeScene {
 
 	// VBOs for the cube's vertices and normals
 
-	const unsigned int GRID_SIZE{ 5 };
+	const unsigned int GRID_SIZE{ 2 };
 
 public:
 	ColorCubeScene() : cube({ "Position", "Normal" }, oglplus::shapes::Cube()) {
