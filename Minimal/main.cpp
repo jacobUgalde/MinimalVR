@@ -538,6 +538,8 @@ protected:
 			return;
 		}
 
+		//maybe track key input here?
+
 		GlfwApp::onKey(key, scancode, action, mods);
 	}
 
@@ -608,7 +610,8 @@ protected:
 #pragma warning( default : 4068 4244 4267 4065)
 
 
-
+//the blow allows the shaders to access the below values at their respective location
+//i.e. because Normal = 2 below, its location is accessed at location = 2 in VERTEX_SHADER
 namespace Attribute {
 	enum {
 		Position = 0,
@@ -651,6 +654,10 @@ void main(void) {
     if (!all(equal(color, abs(color)))) {
         color = vec3(1.0) - abs(color);
     }
+
+	//color = vec3(1.0, 0.0, 0.0);
+	//COOL COOL ALL COLORING OF THE CUBES IS DONE HERE
+
     fragColor = vec4(color, 1.0);
 }
 )SHADER";
@@ -659,7 +666,7 @@ void main(void) {
 struct ColorCubeScene {
 
 	// Program
-	oglplus::shapes::ShapeWrapper cube;
+	oglplus::shapes::ShapeWrapper cube;//maybe render other shape here?
 	oglplus::Program prog;
 	oglplus::VertexArray vao;
 	GLuint instanceCount;
@@ -713,6 +720,7 @@ public:
 				}
 			}
 
+			//uhhh what does this do
 			Context::Bound(Buffer::Target::Array, instances).Data(instance_positions);
 			instanceCount = (GLuint)instance_positions.size();
 			int stride = sizeof(mat4);
@@ -747,7 +755,8 @@ public:
 protected:
 	void initGl() override {
 		RiftApp::initGl();
-		glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+//		glClearColor(0.91f, 0.77f, 1.0f, 0.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //NVM BACKGROUND COLORING IS DONE HERE
 		glEnable(GL_DEPTH_TEST);
 		ovr_RecenterTrackingOrigin(_session);
 		cubeScene = std::shared_ptr<ColorCubeScene>(new ColorCubeScene());
@@ -758,7 +767,7 @@ protected:
 	}
 
 	void renderScene(const glm::mat4 & projection, const glm::mat4 & headPose) override {
-		cubeScene->render(projection, glm::inverse(headPose));
+		cubeScene->render(projection, glm::inverse(headPose));// ohhhh so headPose is the camera matrix display thingy instead of the regular display?
 	}
 };
 
