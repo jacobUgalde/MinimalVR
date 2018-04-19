@@ -610,6 +610,7 @@ protected:
 #include <oglplus/math/sphere.hpp>
 #include <oglplus/shapes/cube.hpp>
 #include <oglplus/shapes/wrapper.hpp>
+#include "Model.h"
 #pragma warning( default : 4068 4244 4267 4065)
 
 
@@ -682,7 +683,7 @@ struct ColorCubeScene {
 public:
 	ColorCubeScene() : cube({ "Position", "Normal" }, oglplus::shapes::Cube()) {
 		using namespace oglplus;
-		aiScene scene = aiScene(;
+		//aiScene* scene = new aiScene();
 		try {
 			// attach the shaders to the program
 			prog.AttachShader(
