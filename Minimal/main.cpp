@@ -24,6 +24,8 @@ limitations under the License.
 #include <algorithm>
 
 #include <Windows.h>
+#include <time.h>       /* time */
+#include <assimp\scene.h> //nice
 
 #define __STDC_FORMAT_MACROS 1
 
@@ -605,6 +607,7 @@ protected:
 #include <oglplus/bound/framebuffer.hpp>
 #include <oglplus/bound/renderbuffer.hpp>
 #include <oglplus/bound/buffer.hpp>
+#include <oglplus/math/sphere.hpp>
 #include <oglplus/shapes/cube.hpp>
 #include <oglplus/shapes/wrapper.hpp>
 #pragma warning( default : 4068 4244 4267 4065)
@@ -679,6 +682,7 @@ struct ColorCubeScene {
 public:
 	ColorCubeScene() : cube({ "Position", "Normal" }, oglplus::shapes::Cube()) {
 		using namespace oglplus;
+		aiScene scene = aiScene(;
 		try {
 			// attach the shaders to the program
 			prog.AttachShader(
@@ -704,6 +708,10 @@ public:
 		vao.Bind();
 		// Create a cube of cubes
 		{
+			srand(time(NULL));
+			int counter = 0;
+			int randomSphere = rand() % 24;//random number between 0 and 24
+
 			std::vector<mat4> instance_positions;
 			for (unsigned int z = 0; z < GRID_SIZE; ++z) {
 				for (unsigned int y = 0; y < GRID_SIZE; ++y) {
@@ -712,10 +720,16 @@ public:
 						int ypos = (y - (GRID_SIZE / 2)) * 2;
 						int zpos = (z - (GRID_SIZE / 2)) * 2;
 						vec3 relativePosition = vec3(xpos, ypos, zpos);
-						if (relativePosition == vec3(0)) {
-							continue;
+						if (relativePosition == vec3(0)) 
+						{
+							continue; //don't draw a cube at the origin
+						}
+						if (randomSphere == counter)
+						{
+							//highlight one random sphere here
 						}
 						instance_positions.push_back(glm::translate(glm::mat4(1.0f), relativePosition));
+						counter++;
 					}
 				}
 			}
